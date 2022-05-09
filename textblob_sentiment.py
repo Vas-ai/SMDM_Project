@@ -79,13 +79,13 @@ def textblob_senti(dataframe):
     # fin_data['Subjectivity'] = fin_data['Lemma'].apply(getSubjectivity) 
     fin_data['Polarity'] = fin_data['Lemma'].apply(getPolarity) 
     fin_data['text_blob'] = fin_data['Polarity'].apply(analysis)
-    print(fin_data.head())
+    # print(fin_data.head())
 
     tb_counts = fin_data.text_blob.value_counts()
-    print(tb_counts)
+    # print(tb_counts)
     
 
     df1 = fin_data.groupby('date')['text_blob'].mean().reset_index()
-    print(df1.head())
+    # print(df1.head())
 
     return df1
