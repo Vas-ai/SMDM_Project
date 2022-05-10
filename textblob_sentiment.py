@@ -34,7 +34,7 @@ def token_stop_pos(text):
             newlist.append(tuple([word, pos_dict.get(tag[0])]))
     return newlist
 
-
+# Lemmatizing the input data
 wordnet_lemmatizer = WordNetLemmatizer()
 def lemmatize(pos_data):
     lemma_rew = " "
@@ -66,8 +66,9 @@ def analysis(score):
     else:
         return 1
 
-
+#Performing the sentiment analysis
 def textblob_senti(dataframe):
+
     dataframe['POS tagged'] = dataframe['text'].apply(token_stop_pos)
     # print(dataframe.head())
 

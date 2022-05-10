@@ -34,7 +34,7 @@ def token_stop_pos(text):
             newlist.append(tuple([word, pos_dict.get(tag[0])]))
     return newlist
 
-
+#Lemmatizing the data
 wordnet_lemmatizer = WordNetLemmatizer()
 def lemmatize(pos_data):
     lemma_rew = " "
@@ -64,21 +64,15 @@ def vader_analysis(compound):
     else:
         return 0
 
-
+#Performing vader sentimental anlysis
 def vader_sentiment(dataframe):
     dataframe['POS tagged'] = dataframe['text'].apply(token_stop_pos)
     # print(dataframe.head())
-
     dataframe['Lemma'] = dataframe['POS tagged'].apply(lemmatize)
     # print(dataframe.head())
-
     fin_data = pd.DataFrame(dataframe[['text', 'Lemma','date']])
-
-
     fin_data['Vader Sentiment'] = fin_data['Lemma'].apply(vadersentimentanalysis)
     fin_data['vader_sentiment'] = fin_data['Vader Sentiment'].apply(vader_analysis)
     fin_data.head()
-
     df2 = fin_data.groupby('date')['vader_sentiment'].mean().reset_index()
-
     return df2

@@ -4,18 +4,18 @@ import string
 import nltk
 from nltk.corpus import stopwords
 
-#Removing usernames:
+#Removing usernames from the tweet:
 def remove_username(text):
     text = re.sub('@[^\s]+','',text)
     return text
 
 
-#Function for removing URL's
+#Function for removing URL's from the tweet
 def remove_url(text):
     url = re.compile(r'https?://\S+|www\.\S+')
     return url.sub(r'',text)
 
-#Removing the Hash-tag word in its entirety
+#Removing the Hash-tag word in its entirety from the tweet
 def remove_hastag(text):
     remove_hash = ""
     for word in text:
@@ -23,7 +23,7 @@ def remove_hastag(text):
             remove_hash+=word
     return remove_hash
 
-#removing punctuations
+#removing punctuations from the data for further cleaning
 remove_punctuations_from_data = [',', '"', ':', ')', '(','?', '|', ';', "'", '$', '&', '/', '[', ']', '>', '%', '=', '#', '*', '+', '\\', '~', '@','·', '_', '{', '}','^', '®', '`', '<', '>', '″', '\'', '“', '”', '-','═', ':','⋅', '‘','`','-','’','—','.','!']
 def remove_punctuations(text):
     for punctuation in remove_punctuations_from_data:
@@ -38,7 +38,7 @@ def remove_newlinecharacters(text):
         text = text.replace(punctuation, ' ')
     return text
 
-#decorating text
+#decorating text for efficient NLP
 def decontraction(text):
     text = re.sub(r"won\'t", " will not", text)
     text = re.sub(r"won\'t've", " will not have", text)
@@ -67,16 +67,17 @@ def decontraction(text):
     text = re.sub(r"\'re", " are", text)
     return text
 
-#removing stop words
+#removing stop words from the text
 def remove_stopwords(text):
     text = ' '.join([word for word in text.split() if word not in (stopwords.words('english'))])
     return text
 
-#removing html tags
+#removing html tags from the text
 def remove_html(text):
     html=re.compile(r'<.*?>')
     return html.sub(r'',text)
 
+#seperate alphanumeric 
 def seperate_alphanumeric(text):
     words = text
     words = re.findall(r"[^\W\d_]+|\d+", words)
@@ -95,6 +96,7 @@ def char(text):
     substitute = re.sub(r'[^a-zA-Z]',' ',text)
     return substitute
 
+#remove emojis
 def remove_emoji(text):
     emoji_pattern = re.compile("["
                            u"\U0001F600-\U0001F64F"  # emoticons
@@ -106,12 +108,13 @@ def remove_emoji(text):
                            "]+", flags=re.UNICODE)
     return emoji_pattern.sub(r'', text)
 
+#data preprocessing
 def data_preprocessing(data, stock):
     #data = pd.read_csv(r"./output/" + "TITN" + ".csv" , encoding = 'utf8')
     # print(stock)
     # print(data['text'])
     data = data.dropna()
-
+    #CLEANING THE DATA
     data['text'] = data['text'].apply(lambda x : remove_username(x))
     data['text'] = data['text'].apply(lambda x : remove_url(x))
     data['text'] = data['text'].apply(lambda x : remove_emoji(x))
@@ -127,7 +130,7 @@ def data_preprocessing(data, stock):
 
     # print("Data after Removing punctuations: \n")
     # print(data['text'])
-
+    #CONVERTING THE DATA TO CSV TO FORMAT
     data.to_csv("./output/" + "cleaned_" + stock + ".csv")
-
+    #Returning the cleaned data
     return data
